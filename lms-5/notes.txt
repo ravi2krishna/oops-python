@@ -1,0 +1,58 @@
+1 - contracts.py 
+    -> Defines contracts for shared behaviors across entities
+    -> Personable: set_personal_details(id, name, age, email, mobile), person_complete_info()
+    -> Payables: calculate_payment() for any payable entity
+
+2 - person.py
+    -> AbstractPerson: base class encapsulating shared attributes & behavior
+    -> Private fields with properties (id, name, age, email, mobile)
+    -> Implements Personable’s person_complete_info() and set_personal_details()
+
+3 - student.py
+    -> Inherits AbstractPerson to reuse person data/logic
+    -> Implements Payables (calculate_payment → course fee flow)
+    -> Student-specific features: coupons, global discount, attendance, scores, achievements
+
+4 - trainer.py
+    -> Inherits AbstractPerson to reuse person data/logic
+    -> Implements Payables (calculate_payment → sessions payment flow)
+    -> Trainer-specific features: session-based pay and rating bonus
+
+5 - lms_app.py 
+    -> Main orchestration for creating objects and running the flow
+
+🎯 Why Separate Files is Better (essence preserved, updated to current design):
+    1. Single Responsibility Principle (SRP)
+       - contracts.py: pure behavior contracts (Personable, Payables)
+        - person.py: shared person state/behavior (AbstractPerson)
+        - student.py / trainer.py: concrete implementations with domain logic
+
+    2. Interface Segregation & Decoupling
+        - Contracts (Personable, Payables) live outside the base class
+        - Classes can implement contracts without being forced into a specific hierarchy
+        - Promotes loose coupling and easier substitution/mocking
+
+    3. Python Best Practices
+        - Domain/intent-first names: person.py and contracts.py
+        - Abstract base class for shared implementation; interfaces for capabilities
+        - Properties for encapsulation; multiple inheritance for capabilities (Payables)
+
+    4. Flexibility & Reusability
+        - Add new roles (Mentor, Admin) by:
+          a) inheriting AbstractPerson
+          b) implementing Personable/Payables as needed
+        - Shared contracts enable polymorphism in callers without changing app code
+
+🚫 Why Combining Would Be Problematic:
+    1. Violates Separation of Concerns
+        - Mixing contracts and implementation blurs responsibilities
+    2. Tight Coupling
+        - Forces all implementations to inherit from a specific base even when unnecessary
+    3. Import Complexity & Cycles
+        - Keeping contracts separate reduces circular import risks
+
+✅ OOP Pillars Exhibited:
+    - Inheritance: Student/Trainer ← AbstractPerson
+    - Encapsulation: private fields + @property accessors
+    - Abstraction: contracts (Personable, Payables) and abstract base behavior
+    - Polymorphism: same interface (Payables/Personable), different implementations
