@@ -16,12 +16,6 @@ class Student(AbstractPerson, Payables):
     def __init__(self, student_id=None, student_name=None, student_age=None, student_email=None, student_mobile_number=None):
         # NEWLY UPDATED -> AbstractPerson.__init__ earlier Person.__init__
         AbstractPerson.__init__(self, id=student_id, name=student_name, age=student_age, email=student_email, mobile=student_mobile_number)
-        # Private student-specific state
-        self.__total_sessions_attended = 0
-        self.__attendance_credits = 0
-        self.__performance_credit_points = 0
-        self.__final_credits = 0
-        self.__trainer_rating = 0 
     
     # Instance method: calculate course fee with global discount and keywords
     def calculate_course_fee(self):
@@ -51,16 +45,18 @@ class Student(AbstractPerson, Payables):
         print("="*50)
         print("         ATTENDANCE CALCULATION")
         print("="*50)
+        total_sessions_attended = 0
+        attendance_credits = 0
         total_sessions_attended = int(input("Enter Total Sessions Attended: "))
         # Private student-specific state
-        self.__total_sessions_attended = total_sessions_attended
+        total_sessions_attended = total_sessions_attended
         if total_sessions_attended >= 30:
-            self.__attendance_credits += 5
+            attendance_credits = 5
         elif total_sessions_attended >= 20:
-            self.__attendance_credits += 3
+            attendance_credits = 3
         else:
-            self.__attendance_credits = 0
-        return self.__attendance_credits
+            attendance_credits = 0
+        return attendance_credits
     
     # Get multiple scores dynamically and calculate average 
     def calculate_average_score(self):
@@ -87,13 +83,14 @@ class Student(AbstractPerson, Payables):
     # Calculate performance credits based on average score
     def performance_credits(self, score): 
         # Private student-specific state
+        performance_credits = 0
         if score >= 85:
-            self.__performance_credit_points += 5
+            performance_credit_points = 5
         elif score >= 60:
-            self.__performance_credit_points += 3
+            performance_credit_points = 3
         else:
-            self.__performance_credit_points = 0
-        return self.__performance_credit_points
+            performance_credit_points = 0
+        return performance_credit_points
 
     # Calculate achievements (combines average score and session credits)
     def achievement_status(self):
