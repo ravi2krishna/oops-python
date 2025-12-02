@@ -1,19 +1,18 @@
-# Parent Class with Common Attributes Of Student, Trainer & Future Entities
+# Parent Class With Common Attributes For All Persons 
 class Person:
-    def __init__(self, id=None, name=None, age=None, email=None, mobile=None):
-        # NEWLY UPDATED
-        # Private attributes
-        self.__id = id
-        self.__name = name
-        self.__age = age
-        self.__email = email
-        self.__mobile = mobile
-
+    # constructor with instance data 
+    def __init__(self, id=None, name=None, age=None, email=None, mobile_number=None):
+        self.id = id
+        self.name = name
+        self.age = age
+        self.email = email
+        self.mobile_number = mobile_number
+    
     # NEWLY ADDED 
     # id
     @property
     def id(self):
-        return self.__id
+       return self.__id
 
     @id.setter
     def id(self, value):
@@ -36,7 +35,7 @@ class Person:
     @age.setter
     def age(self, value):
         self.__age = value
-
+    
     # email
     @property
     def email(self):
@@ -48,17 +47,20 @@ class Person:
 
     # mobile
     @property
-    def mobile(self):
-        return self.__mobile
+    def mobile_number(self):
+        return self.__mobile_number
 
-    @mobile.setter
-    def mobile(self, value):
-        self.__mobile = value
-
+    @mobile_number.setter
+    def mobile_number(self, value):
+        self.__mobile_number = value
+        
+    # common method for all persons -> Same as old not updated
     def person_complete_info(self):
-        print("======= Complete Information =======")
+        print("=" * 50)
+        print("             Complete Information")
         print(f"ID: {self.id}")
         print(f"Name: {self.name}")
         print(f"Age: {self.age}")
         print(f"Email: {self.email}")
-        print(f"Mobile No: {self.mobile}")
+        print(f"Mobile: {self.mobile_number}")
+        print("=" * 50)

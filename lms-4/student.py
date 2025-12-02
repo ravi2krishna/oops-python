@@ -1,114 +1,90 @@
 from person import Person
-class Student(Person):    
-    # Static/class variables shared across all instances
+# Student Blueprint With Person Features
+class Student(Person):
+    # class variables shared across all instances/objects of this class
     institute_name = "Edify"
-    course_name = "Python"
-    global_discount = 0.1 # global site wide discount
+    global_discount = 0.1 
     
-    # Constructor with Non-static / Instance variables specific to each student
-    # Student ID, Name, Age, Email & Mobile Number
+    # constructor with instance data 
     def __init__(self, student_id=None, student_name=None, student_age=None, student_email=None, student_mobile_number=None):
-        # Call base constructor
-        Person.__init__(self, id=student_id, name=student_name, age=student_age, email=student_email, mobile=student_mobile_number)
-        # NEWLY UPDATED 
-        # Private student-specific state
-        self.__total_sessions_attended = 0
-        self.__attendance_credits = 0
-        self.__performance_credit_points = 0
-        self.__final_credits = 0
-        self.__trainer_rating = 0 
+        # Using Parent class constructor 
+        Person.__init__(self,id=student_id,name=student_name,age=student_age,email=student_email,mobile_number=student_mobile_number)
     
-    # Instance method: calculate course fee with global discount and keywords
-    def calculate_course_fee(self):
-        discount = 0.0
-        course_fee = 30000
-        # if coupon is PROMO apply 5000 discount 
-        # if coupon is FIFTY apply 15000 discount
-        print("="*50)
-        print("         COURSE FEE CALCULATION")
-        print("="*50)
-        student_coupon = input("Enter Coupon Code: ")
-        if student_coupon == "PROMO":
-            discount += 5000
-        elif student_coupon == "FIFTY":
-            discount += 15000
-
-        # apply global discount
-        gd = course_fee * Student.global_discount 
-        final_fee = course_fee - (discount + gd) 
-        print(f"Original Course Fee: ${course_fee}")
-        print(f"Discount Applied Via Coupon: ${discount}") # Discount Applied Via Coupon
-        print(f"Global Discount Applied: ${gd}")
-        print(f"Final Course Fee after Discounts: ${final_fee}")       
-
-    # Calculate sessions/attendance credits 
-    def sessions_credits(self):
-        print("="*50)
-        print("         ATTENDANCE CALCULATION")
-        print("="*50)
-        total_sessions_attended = int(input("Enter Total Sessions Attended: "))
-        # NEWLY UPDATED 
-        # Private student-specific state
-        self.__total_sessions_attended = total_sessions_attended
-        if total_sessions_attended >= 30:
-            self.__attendance_credits += 5
-        elif total_sessions_attended >= 20:
-            self.__attendance_credits += 3
-        else:
-            self.__attendance_credits = 0
-        return self.__attendance_credits
-    
-    # Get multiple scores dynamically and calculate average 
-    def calculate_average_score(self):
-        print("="*50)
-        print("         AVERAGE SCORE CALCULATION")
-        print("="*50)
-        scores = []
-        while True:
-            score_input = input("Enter Score or type done: ")
-            if score_input == "done":
-                break
-            if score_input.isdigit():
-                score = int(score_input)
-                if 0 <= score <=100:
-                    scores.append(score)
-                else:
-                    print("Score Should be 0-100 ")
-            else:
-                print("Score Should Numbers Only")  
+    # class method -> display institute info 
+    @classmethod
+    def institute_info(cls):
+        print("=" * 50)
+        print("             Welcome To: "+Student.institute_name)
+        print("=" * 50)
         
-        average_score = sum(scores) / len(scores)
-        return average_score
+    # calculate sessions credits 
+    def sessions_credits_cal(self):
+        # local variables
+        sessions_credits = 0
+        total_sessions_attended = int(input("Enter Total Sessions Attended: "))
+        if total_sessions_attended >= 30:
+            sessions_credits = 5
+        elif total_sessions_attended >= 20:
+            sessions_credits = 3
+        else:
+            sessions_credits = 0
+        return sessions_credits
     
-    # Calculate performance credits based on average score
-    def performance_credits(self, score): 
-        # NEWLY UPDATED 
-        # Private student-specific state
+    # calculate score credits 
+    def score_credits_cal(self,score):
+        # local variables
+        score_credits = 0
         if score >= 85:
-            self.__performance_credit_points += 5
+            score_credits = 5
         elif score >= 60:
-            self.__performance_credit_points += 3
+            score_credits = 3
         else:
-            self.__performance_credit_points = 0
-        return self.__performance_credit_points
-
-    # Calculate achievements (combines average score and session credits)
-    def achievement_status(self):
-        # NEWLY UPDATED 
-        # Private student-specific state
-        self.__final_credits = self.performance_credits(self.calculate_average_score()) + self.sessions_credits()
-        if self.__final_credits >= 10:
-            print("**** GOLD ****")
-        elif self.__final_credits >= 8:
-            print("**** SILVER ****")
-        else:
-            print("**** BRONZE ****")
+            score_credits = 0
+        return score_credits
     
-    # Calculate trainer rating bonus 
-    def trainer_ratings(self):
-        # NEWLY UPDATED 
-        # Private student-specific state
-        self.__trainer_rating = int(input("Enter Trainer Rating: (1-5)"))
-        if self.__trainer_rating >= 5:
+    # calculate achievement status (combining sessions credits & score credits)
+    def achievement_status(self):
+        final_credits = self.sessions_credits_cal() + self.score_credits_cal(90)
+        if final_credits >= 10:
+            print("Got 🥇")
+        elif final_credits >= 8:
+            print("Got 🥈")
+        else:
+            print("Got 🥉")
+    
+    # give rating to trainer
+    def trainer_rating_calculate(self):
+        trainer_rating = int(input("Enter Trainer Rating (1-5): "))
+        if trainer_rating >=5: 
             return 5000
-        return 0    
+        else:
+            return 0
+    
+    # After 3 months New Functionality Added 
+    # Calculate Course Fee Functionality 
+    def course_fee_cal(self):
+        coupon_discount = 0
+        course_fee = 30000
+        # if COUPON is "PROMO" give 5000 discount 
+        # if COUPON is "FIFTY" give 15000 discount 
+        print("=" * 50)
+        print("             Course Fee Calculation")
+        print("=" * 50)
+        
+        print(f"Original Fee: {course_fee}")
+        # applying global discount
+        gd = course_fee * Student.global_discount
+        
+        coupon = input("Enter Coupon Code: ")
+        if coupon == "PROMO":
+            coupon_discount = 5000
+            course_fee -= coupon_discount
+        elif coupon == "FIFTY":
+            coupon_discount = 15000
+            course_fee -= coupon_discount
+        
+        final_fee = course_fee - gd 
+        
+        print(f"Discount Through Coupon: {coupon_discount}")
+        print(f"Discount Through Global: {gd}")
+        print(f"Final Course Fee: {final_fee}") 
